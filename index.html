@@ -17,9 +17,41 @@
             margin: 0 auto;
             background-color: white;
         }
+
+        #stats-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        #stats-content {
+            text-align: center;
+        }
+
+        #stats-square {
+            width: 50px;
+            height: 50px;
+            background-color: #0080FF;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
+    <div id="stats-popup">
+        <div id="stats-content">
+            <div id="stats-square"></div>
+            <p>HP: 100</p>
+        </div>
+    </div>
+
     <script>
         // Canvas setup
         const canvas = document.createElement('canvas');
@@ -53,14 +85,24 @@
             ArrowRight: false
         };
 
+        let statsVisible = false;
+        const statsPopup = document.getElementById('stats-popup');
+
         // Event listeners for key presses
         window.addEventListener('keydown', (e) => {
             if (keys.hasOwnProperty(e.key)) keys[e.key] = true;
+            if (e.key === 'v') toggleStats();
         });
 
         window.addEventListener('keyup', (e) => {
             if (keys.hasOwnProperty(e.key)) keys[e.key] = false;
         });
+
+        // Toggle stats popup
+        function toggleStats() {
+            statsVisible = !statsVisible;
+            statsPopup.style.display = statsVisible ? 'flex' : 'none';
+        }
 
         // Game loop
         function gameLoop() {
