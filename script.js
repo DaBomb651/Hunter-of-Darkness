@@ -2,7 +2,7 @@
 const player = document.getElementById("player");
 const gameContainer = document.getElementById("game-container");
 
-// Player starting position
+// Player starting position (centered)
 let playerX = window.innerWidth / 2;
 let playerY = window.innerHeight / 2;
 
@@ -49,5 +49,5 @@ function updatePlayerPosition() {
   player.style.top = `${playerY}px`;
 
   // Scroll the world to keep the player centered
-  gameContainer.style.backgroundPosition = `${-(playerX - window.innerWidth / 2)}px ${-(playerY - window.innerHeight / 2)}px`;
+  gameContainer.style.transform = `translate(-${playerX - window.innerWidth / 2}px, -${playerY - window.innerHeight / 2}px)`;
 }
