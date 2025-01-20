@@ -48,7 +48,7 @@
     <div id="stats-popup">
         <div id="stats-content">
             <div id="stats-square"></div>
-            <p>HP: 100</p>
+            <p id="stats-hp">HP: 100</p>
         </div>
     </div>
 
@@ -68,6 +68,7 @@
         const SQUARE_SIZE = 50;
         const SQUARE_COLOR = '#0080FF';
         const SQUARE_SPEED = 5;
+        let playerHP = 100;
 
         // World coordinates for the square
         let worldX = 0;
@@ -87,6 +88,23 @@
 
         let statsVisible = false;
         const statsPopup = document.getElementById('stats-popup');
+        const statsHP = document.getElementById('stats-hp');
+
+        // Enemies array
+        const enemies = [];
+        const ENEMY_SIZE = 30;
+        const ENEMY_COLOR = '#FF0000';
+        const ENEMY_SPEED = 2;
+        const SPAWN_INTERVAL = 2000; // 2 seconds
+
+        // Spawn enemies
+        setInterval(() => {
+            const enemy = {
+                x: Math.random() * 2000 - 1000, // Random position in world coordinates
+                y: Math.random() * 2000 - 1000
+            };
+            enemies.push(enemy);
+        }, SPAWN_INTERVAL);
 
         // Event listeners for key presses
         window.addEventListener('keydown', (e) => {
@@ -119,6 +137,40 @@
             ctx.fillStyle = SQUARE_COLOR;
             ctx.fillRect(SCREEN_WIDTH / 2 - SQUARE_SIZE / 2, SCREEN_HEIGHT / 2 - SQUARE_SIZE / 2, SQUARE_SIZE, SQUARE_SIZE);
 
+            // Update and draw enemies
+            ctx.fillStyle = ENEMY_COLOR;
+            enemies.forEach((enemy, index) => {
+                // Move enemies towards the player
+                const dx = SCREEN_WIDTH / 2 - SQUARE_SIZE / 2 - (enemy.x - worldX);
+                const dy = SCREEN_HEIGHT / 2 - SQUARE_SIZE / 2 - (enemy.y - worldY);
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const moveX = (dx / distance) * ENEMY_SPEED;
+                const moveY = (dy / distance) * ENEMY_SPEED;
+                enemy.x += moveX;
+                enemy.y += moveY;
+
+                // Draw enemy
+                ctx.fillRect(
+                    SCREEN_WIDTH / 2 - SQUARE_SIZE / 2 + (enemy.x - worldX),
+                    SCREEN_HEIGHT / 2 - SQUARE_SIZE / 2 + (enemy.y - worldY),
+                    ENEMY_SIZE,
+                    ENEMY_SIZE
+                );
+
+                // Check collision with player
+                if (
+                    Math.abs(enemy.x - worldX) < SQUARE_SIZE &&
+                    Math.abs(enemy.y - worldY) < SQUARE_SIZE
+                ) {
+                    playerHP -= 1; // Reduce HP
+                    statsHP.textContent = `HP: ${playerHP}`;
+                    if (playerHP <= 0) {
+                        alert('Game Over!');
+                        window.location.reload();
+                    }
+                }
+            });
+
             // Draw the world (grid for debugging)
             ctx.strokeStyle = '#ccc';
             for (let x = -worldX % 50; x < SCREEN_WIDTH; x += 50) {
@@ -144,4 +196,3 @@
     </script>
 </body>
 </html>
-
