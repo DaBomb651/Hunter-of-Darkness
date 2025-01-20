@@ -115,11 +115,29 @@
             // Clear the canvas
             ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+            // Calculate the position of the world relative to the square
+            const offsetX = SCREEN_WIDTH / 2 - worldX - SQUARE_SIZE / 2;
+            const offsetY = SCREEN_HEIGHT / 2 - worldY - SQUARE_SIZE / 2;
+
             // Draw the square centered on the screen
-            const screenX = (SCREEN_WIDTH - SQUARE_SIZE) / 2;
-            const screenY = (SCREEN_HEIGHT - SQUARE_SIZE) / 2;
             ctx.fillStyle = SQUARE_COLOR;
-            ctx.fillRect(screenX, screenY, SQUARE_SIZE, SQUARE_SIZE);
+            ctx.fillRect(SCREEN_WIDTH / 2 - SQUARE_SIZE / 2, SCREEN_HEIGHT / 2 - SQUARE_SIZE / 2, SQUARE_SIZE, SQUARE_SIZE);
+
+            // Draw the world (for debugging purposes, add a grid or markers)
+            ctx.strokeStyle = '#ccc';
+            for (let x = offsetX % 50; x < SCREEN_WIDTH; x += 50) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, SCREEN_HEIGHT);
+                ctx.stroke();
+            }
+
+            for (let y = offsetY % 50; y < SCREEN_HEIGHT; y += 50) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(SCREEN_WIDTH, y);
+                ctx.stroke();
+            }
 
             // Request the next frame
             requestAnimationFrame(gameLoop);
