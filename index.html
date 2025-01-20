@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sprite Movement Game</title>
+    <title>Square Movement Game</title>
     <style>
         body {
             margin: 0;
@@ -24,7 +24,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: rgba(0, 0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.8);
             color: white;
             display: none;
             justify-content: center;
@@ -47,7 +47,7 @@
 <body>
     <div id="stats-popup">
         <div id="stats-content">
-            <img id="stats-square" src="player.png" alt="Player">
+            <div id="stats-square"></div>
             <p>HP: 100</p>
         </div>
     </div>
@@ -64,16 +64,14 @@
         canvas.width = SCREEN_WIDTH;
         canvas.height = SCREEN_HEIGHT;
 
-        // Sprite setup
-        const sprite = new Image();
-        sprite.src = 'player.png';
-        const SPRITE_WIDTH = 50; // Adjust to your sprite dimensions
-        const SPRITE_HEIGHT = 50; // Adjust to your sprite dimensions
+        // Square properties
+        const SQUARE_SIZE = 50;
+        const SQUARE_COLOR = '#0080FF';
+        const SQUARE_SPEED = 5;
 
-        // Player properties
-        let playerX = (SCREEN_WIDTH - SPRITE_WIDTH) / 2;
-        let playerY = (SCREEN_HEIGHT - SPRITE_HEIGHT) / 2;
-        const PLAYER_SPEED = 5;
+        // Square starting position
+        let squareX = (SCREEN_WIDTH - SQUARE_SIZE) / 2;
+        let squareY = (SCREEN_HEIGHT - SQUARE_SIZE) / 2;
 
         // Movement flags
         const keys = {
@@ -108,30 +106,29 @@
 
         // Game loop
         function gameLoop() {
-            // Update player position based on input
-            if (keys.w || keys.ArrowUp) playerY -= PLAYER_SPEED; // Move up
-            if (keys.s || keys.ArrowDown) playerY += PLAYER_SPEED; // Move down
-            if (keys.a || keys.ArrowLeft) playerX -= PLAYER_SPEED; // Move left
-            if (keys.d || keys.ArrowRight) playerX += PLAYER_SPEED; // Move right
+            // Update square position based on input
+            if (keys.w || keys.ArrowUp) squareY -= SQUARE_SPEED; // Move up
+            if (keys.s || keys.ArrowDown) squareY += SQUARE_SPEED; // Move down
+            if (keys.a || keys.ArrowLeft) squareX -= SQUARE_SPEED; // Move left
+            if (keys.d || keys.ArrowRight) squareX += SQUARE_SPEED; // Move right
 
-            // Keep the player within the screen boundaries
-            playerX = Math.max(0, Math.min(SCREEN_WIDTH - SPRITE_WIDTH, playerX));
-            playerY = Math.max(0, Math.min(SCREEN_HEIGHT - SPRITE_HEIGHT, playerY));
+            // Keep the square within the screen boundaries
+            squareX = Math.max(0, Math.min(SCREEN_WIDTH - SQUARE_SIZE, squareX));
+            squareY = Math.max(0, Math.min(SCREEN_HEIGHT - SQUARE_SIZE, squareY));
 
             // Clear the canvas
             ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-            // Draw the sprite
-            ctx.drawImage(sprite, playerX, playerY, SPRITE_WIDTH, SPRITE_HEIGHT);
+            // Draw the square
+            ctx.fillStyle = SQUARE_COLOR;
+            ctx.fillRect(squareX, squareY, SQUARE_SIZE, SQUARE_SIZE);
 
             // Request the next frame
             requestAnimationFrame(gameLoop);
         }
 
         // Start the game loop
-        sprite.onload = () => {
-            gameLoop();
-        };
+        gameLoop();
     </script>
 </body>
 </html>
