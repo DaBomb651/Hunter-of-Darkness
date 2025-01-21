@@ -91,11 +91,13 @@
         canvas.width = SCREEN_WIDTH;
         canvas.height = SCREEN_HEIGHT;
 
-        // Square properties
-        const SQUARE_SIZE = 50;
-        const SQUARE_COLOR = '#0080FF';
-        const SQUARE_SPEED = 5;
-        let playerHP = 100;
+// Square properties
+const SQUARE_SIZE = 50;
+const SQUARE_COLOR = '#0080FF';
+const SQUARE_SPEED = 5;
+let playerHP = 100; // <-- Right here
+let gameOverFlag = false; // <-- Add this line after playerHP
+
 
         // World coordinates for the square
         let worldX = 0;
@@ -185,35 +187,42 @@
         }
 
         // Handle game over
-        function gameOver() {
-            gameOverUI.style.display = 'flex';
-        }
+function gameOver() {
+    gameOverFlag = true; // Disable movement
+    gameOverUI.style.display = 'flex';
+}
+
 
         // Respawn the player
-        respawnButton.addEventListener('click', () => {
-            playerHP = 100;
-            statsHPElement.textContent = `HP: ${playerHP}`;
-            worldX = 0;
-            worldY = 0;
-            knockbackX = 0;
-            knockbackY = 0;
-            enemies.length = 0;
-            gameOverUI.style.display = 'none';
-        });
+respawnButton.addEventListener('click', () => {
+    playerHP = 100;
+    statsHPElement.textContent = `HP: ${playerHP}`;
+    worldX = 0;
+    worldY = 0;
+    knockbackX = 0;
+    knockbackY = 0;
+    enemies.length = 0;
+    gameOverFlag = false; // Re-enable movement
+    gameOverUI.style.display = 'none';
+});
+
 
         // Game loop
         function gameLoop() {
             // Update world position based on input
+            if (!gameOverFlag) {
             if (keys.w || keys.ArrowUp) worldY -= SQUARE_SPEED;
             if (keys.s || keys.ArrowDown) worldY += SQUARE_SPEED;
             if (keys.a || keys.ArrowLeft) worldX -= SQUARE_SPEED;
             if (keys.d || keys.ArrowRight) worldX += SQUARE_SPEED;
+}
 
-            worldX += knockbackX;
-            worldY += knockbackY;
+worldX += knockbackX;
+worldY += knockbackY;
 
-            knockbackX *= 0.9;
-            knockbackY *= 0.9;
+knockbackX *= 0.9;
+knockbackY *= 0.9;
+
 
             // Clear the canvas
             ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
