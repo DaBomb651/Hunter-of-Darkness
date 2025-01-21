@@ -177,8 +177,12 @@
 
             // Make sure the image has fully loaded before drawing it
             if (grassGif.complete) {
-                for (let x = -worldX % GRID_SIZE; x < SCREEN_WIDTH; x += GRID_SIZE) {
-                    for (let y = -worldY % GRID_SIZE; y < SCREEN_HEIGHT; y += GRID_SIZE) {
+                // Draw the grid ahead of the player’s position (offset)
+                const drawOffsetX = -worldX % GRID_SIZE - GRID_SIZE * 5; // Offset to the left
+                const drawOffsetY = -worldY % GRID_SIZE - GRID_SIZE * 5; // Offset upwards
+
+                for (let x = drawOffsetX; x < SCREEN_WIDTH + GRID_SIZE * 5; x += GRID_SIZE) {
+                    for (let y = drawOffsetY; y < SCREEN_HEIGHT + GRID_SIZE * 5; y += GRID_SIZE) {
                         ctx.drawImage(grassGif, x, y, GRID_SIZE, GRID_SIZE);  // Drawing the gif in each square
                     }
                 }
