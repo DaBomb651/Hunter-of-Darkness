@@ -91,12 +91,12 @@
         canvas.width = SCREEN_WIDTH;
         canvas.height = SCREEN_HEIGHT;
 
-// Square properties
-const SQUARE_SIZE = 50;
-const SQUARE_COLOR = '#0080FF';
-const SQUARE_SPEED = 5;
-let playerHP = 100; // <-- Right here
-let gameOverFlag = false; // <-- Add this line after playerHP
+        // Square properties
+        const SQUARE_SIZE = 50;
+        const SQUARE_COLOR = '#0080FF';
+        const SQUARE_SPEED = 5;
+        let playerHP = 100; // <-- Right here
+        let gameOverFlag = false; // <-- Add this line after playerHP
 
 
         // World coordinates for the square
@@ -166,10 +166,21 @@ let gameOverFlag = false; // <-- Add this line after playerHP
             );
         }
 
-        // Draw grid
+        // GIF for grid background
+        const gifImage = new Image();
+        gifImage.src = 'https://github.com/yourusername/yourrepository/blob/main/yourgif.gif'; // Replace with your GitHub URL
+
+        // Draw grid with GIF background
         function drawGrid() {
             const GRID_SIZE = 50;
             ctx.strokeStyle = '#e0e0e0';
+
+            for (let x = -worldX % GRID_SIZE; x < SCREEN_WIDTH; x += GRID_SIZE) {
+                for (let y = -worldY % GRID_SIZE; y < SCREEN_HEIGHT; y += GRID_SIZE) {
+                    // Draw the GIF as the background of each grid square
+                    ctx.drawImage(gifImage, x, y, GRID_SIZE, GRID_SIZE);
+                }
+            }
 
             for (let x = -worldX % GRID_SIZE; x < SCREEN_WIDTH; x += GRID_SIZE) {
                 ctx.beginPath();
@@ -187,42 +198,39 @@ let gameOverFlag = false; // <-- Add this line after playerHP
         }
 
         // Handle game over
-function gameOver() {
-    gameOverFlag = true; // Disable movement
-    gameOverUI.style.display = 'flex';
-}
-
+        function gameOver() {
+            gameOverFlag = true; // Disable movement
+            gameOverUI.style.display = 'flex';
+        }
 
         // Respawn the player
-respawnButton.addEventListener('click', () => {
-    playerHP = 100;
-    statsHPElement.textContent = `HP: ${playerHP}`;
-    worldX = 0;
-    worldY = 0;
-    knockbackX = 0;
-    knockbackY = 0;
-    enemies.length = 0;
-    gameOverFlag = false; // Re-enable movement
-    gameOverUI.style.display = 'none';
-});
-
+        respawnButton.addEventListener('click', () => {
+            playerHP = 100;
+            statsHPElement.textContent = `HP: ${playerHP}`;
+            worldX = 0;
+            worldY = 0;
+            knockbackX = 0;
+            knockbackY = 0;
+            enemies.length = 0;
+            gameOverFlag = false; // Re-enable movement
+            gameOverUI.style.display = 'none';
+        });
 
         // Game loop
         function gameLoop() {
             // Update world position based on input
             if (!gameOverFlag) {
-            if (keys.w || keys.ArrowUp) worldY -= SQUARE_SPEED;
-            if (keys.s || keys.ArrowDown) worldY += SQUARE_SPEED;
-            if (keys.a || keys.ArrowLeft) worldX -= SQUARE_SPEED;
-            if (keys.d || keys.ArrowRight) worldX += SQUARE_SPEED;
-}
+                if (keys.w || keys.ArrowUp) worldY -= SQUARE_SPEED;
+                if (keys.s || keys.ArrowDown) worldY += SQUARE_SPEED;
+                if (keys.a || keys.ArrowLeft) worldX -= SQUARE_SPEED;
+                if (keys.d || keys.ArrowRight) worldX += SQUARE_SPEED;
+            }
 
-worldX += knockbackX;
-worldY += knockbackY;
+            worldX += knockbackX;
+            worldY += knockbackY;
 
-knockbackX *= 0.9;
-knockbackY *= 0.9;
-
+            knockbackX *= 0.9;
+            knockbackY *= 0.9;
 
             // Clear the canvas
             ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
