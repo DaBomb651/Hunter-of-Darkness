@@ -133,6 +133,10 @@
         const gameOverUI = document.getElementById('game-over');
         const respawnButton = document.getElementById('respawn-button');
 
+        // Load the GIF for the background grid
+        const grassGif = new Image();
+        grassGif.src = 'Assets/Grass-Gif.gif';
+
         // Event listeners for key presses
         window.addEventListener('keydown', (e) => {
             if (keys.hasOwnProperty(e.key)) keys[e.key] = true;
@@ -166,19 +170,14 @@
             );
         }
 
-        // GIF for grid background
-        const gifImage = new Image();
-        gifImage.src = 'https://github.com/yourusername/yourrepository/blob/main/yourgif.gif'; // Replace with your GitHub URL
-
-        // Draw grid with GIF background
+        // Draw grid with GIF as background for each square
         function drawGrid() {
             const GRID_SIZE = 50;
             ctx.strokeStyle = '#e0e0e0';
 
             for (let x = -worldX % GRID_SIZE; x < SCREEN_WIDTH; x += GRID_SIZE) {
                 for (let y = -worldY % GRID_SIZE; y < SCREEN_HEIGHT; y += GRID_SIZE) {
-                    // Draw the GIF as the background of each grid square
-                    ctx.drawImage(gifImage, x, y, GRID_SIZE, GRID_SIZE);
+                    ctx.drawImage(grassGif, x, y, GRID_SIZE, GRID_SIZE);  // Drawing the gif in each square
                 }
             }
 
@@ -235,7 +234,7 @@
             // Clear the canvas
             ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-            // Draw the grid
+            // Draw the grid with the GIF background
             drawGrid();
 
             // Spawn enemies randomly
